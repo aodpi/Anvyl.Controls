@@ -5,8 +5,10 @@
 
 
     <Style TargetType="{x:Type local:CustomCalendar}">
-        <Setter Property="Background" Value="MediumVioletRed"/>
+        <Setter Property="Background" Value="DarkGray"/>
         <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FontStyle" Value="Italic"/>
         <Setter Property="MinWidth" Value="240"/>

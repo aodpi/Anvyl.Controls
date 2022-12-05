@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,21 +18,81 @@ namespace CustomWpfCalendar
         private const int COLS = 7;
         private List<CalendarDay> calendarDays = new List<CalendarDay>();
 
+        #region Dependency Properties
+
         public static readonly DependencyProperty DateTimeProperty =
             DependencyProperty.Register(nameof(DateTime), typeof(DateTime), typeof(CustomCalendar), new PropertyMetadata(DateTime.Now));
+
+        public static readonly DependencyProperty CurrentDayForegroundProperty =
+            DependencyProperty.Register(nameof(CurrentDayForeground), typeof(Brush), typeof(CustomCalendar), new PropertyMetadata(Brushes.Black));
+
+        public static readonly DependencyProperty CurrentDayBackgroundProperty =
+            DependencyProperty.Register(nameof(CurrentDayBackground), typeof(Brush), typeof(CustomCalendar), new PropertyMetadata(Brushes.Beige));
+
+        public static readonly DependencyProperty PreviousMonthForegroundProperty =
+            DependencyProperty.Register(nameof(PreviousMonthForeground), typeof(Brush), typeof(CustomCalendar), new PropertyMetadata(Brushes.DarkGray));
+
+        public static readonly DependencyProperty PreviousMonthBackgroundProperty =
+            DependencyProperty.Register(nameof(PreviousMonthBackground), typeof(Brush), typeof(CustomCalendar), new PropertyMetadata(Brushes.White));
+
+        public static readonly DependencyProperty NextMonthBackgroundProperty =
+            DependencyProperty.Register(nameof(NextMonthBackground), typeof(Brush), typeof(CustomCalendar), new PropertyMetadata(Brushes.White));
+
+        public static readonly DependencyProperty NextMonthForegroundProperty =
+            DependencyProperty.Register(nameof(NextMonthForeground), typeof(Brush), typeof(CustomCalendar), new PropertyMetadata(Brushes.DarkGray));
+
+        #endregion
 
         static CustomCalendar()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomCalendar), new FrameworkPropertyMetadata(typeof(CustomCalendar)));
         }
 
-        Point lastClickPosition = new Point();
+        #region Binding Properties
+
+        public Brush NextMonthForeground
+        {
+            get { return (Brush)GetValue(NextMonthForegroundProperty); }
+            set { SetValue(NextMonthForegroundProperty, value); }
+        }
+
+        public Brush NextMonthBackground
+        {
+            get { return (Brush)GetValue(NextMonthBackgroundProperty); }
+            set { SetValue(NextMonthBackgroundProperty, value); }
+        }
+
+        public Brush PreviousMonthBackground
+        {
+            get { return (Brush)GetValue(PreviousMonthBackgroundProperty); }
+            set { SetValue(PreviousMonthBackgroundProperty, value); }
+        }
+
+        public Brush PreviousMonthForeground
+        {
+            get { return (Brush)GetValue(PreviousMonthForegroundProperty); }
+            set { SetValue(PreviousMonthForegroundProperty, value); }
+        }
 
         public DateTime DateTime
         {
             get { return (DateTime)GetValue(DateTimeProperty); }
             set { SetValue(DateTimeProperty, value); }
         }
+
+        public Brush CurrentDayForeground
+        {
+            get { return (Brush)GetValue(CurrentDayForegroundProperty); }
+            set { SetValue(CurrentDayForegroundProperty, value); }
+        }
+
+        public Brush CurrentDayBackground
+        {
+            get { return (Brush)GetValue(CurrentDayBackgroundProperty); }
+            set { SetValue(CurrentDayBackgroundProperty, value); }
+        }
+
+        #endregion
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
@@ -63,9 +124,9 @@ namespace CustomWpfCalendar
                 {
                     var currentDay = days[index];
 
-                    DrawDayText(drawingContext, cellWidth, cellHeight, pixelsPerDip, typeface, i, j, currentDay);
-
                     DrawDayBorders(drawingContext, ref currentDay, cellWidth, cellHeight, dayCellPen, i, j);
+
+                    DrawDayText(drawingContext, cellWidth, cellHeight, pixelsPerDip, typeface, i, j, currentDay);
 
                     index++;
                 }
@@ -78,7 +139,7 @@ namespace CustomWpfCalendar
 
             for (int i = 0; i < 7; i++)
             {
-                var date = CreateDayOfWeek(firstDayOfWeek++, DateTime.MinValue);
+                var date = DateTime.MinValue.CreateDayOfWeek(firstDayOfWeek++);
                 FormattedText dayText = new FormattedText(date.ToString("ddd"), CultureInfo.CurrentCulture, FlowDirection, typeface, 15, Brushes.Black, pixelsPerDip);
                 drawingContext.DrawText(dayText, new Point(i * cellWidth + 20 + ((cellWidth - dayText.Width) / 2), 0));
             }
@@ -93,15 +154,6 @@ namespace CustomWpfCalendar
             }
         }
 
-        private DateTime CreateDayOfWeek(int dayOfWeek, DateTime date)
-        {
-            DateTime dt = date;
-
-            int daysUntilDay = (dayOfWeek - (int)dt.DayOfWeek + 7) % 7;
-            dt = dt.AddDays(daysUntilDay);
-            return dt;
-        }
-
         private void DrawDayBorders(DrawingContext drawingContext, ref CalendarDay currentDay, double cellWidth, double cellHeight, Pen dayCellPen, int i, int j)
         {
             Rect cellBorderRect = new Rect(new Point((j * cellWidth) + 20, (i * cellHeight) + 20), new Size(cellWidth, cellHeight));
@@ -114,6 +166,21 @@ namespace CustomWpfCalendar
 
             currentDay.TargetRect = cellBorderRect;
 
+            if (currentDay.DateTime == new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day))
+            {
+                drawingContext.DrawRectangle(CurrentDayBackground, null, Rect.Inflate(cellBorderRect, -.5, -.5));
+            }
+
+            if (currentDay.IsPreviousMonth)
+            {
+                drawingContext.DrawRectangle(PreviousMonthBackground, null, Rect.Inflate(cellBorderRect, -.5, -.5));
+            }
+
+            if (currentDay.IsNextMonth)
+            {
+                drawingContext.DrawRectangle(NextMonthBackground, null, Rect.Inflate(cellBorderRect, -.5, -.5));
+            }
+
             calendarDays.Add(currentDay);
         }
 
@@ -123,8 +190,14 @@ namespace CustomWpfCalendar
 
             if (currentDay.DateTime == new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day))
             {
-                dayBrush = Brushes.Yellow;
+                dayBrush = CurrentDayForeground;
             }
+
+            if (currentDay.IsPreviousMonth)
+                dayBrush = PreviousMonthForeground;
+
+            if (currentDay.IsNextMonth)
+                dayBrush = NextMonthForeground;
 
             var text = new FormattedText(currentDay.ToString(), CultureInfo.CurrentCulture, FlowDirection, typeface, FontSize, dayBrush, pixelsPerDip);
             var tX = (j * cellWidth) + 20;
@@ -162,7 +235,7 @@ namespace CustomWpfCalendar
             drawingContext.DrawText(text, textOrigin);
         }
 
-        static CalendarDay[] GetDaysArray(DateTime date)
+        private static CalendarDay[] GetDaysArray(DateTime date)
         {
             var calendar = CultureInfo.CurrentCulture.Calendar;
 
@@ -188,14 +261,14 @@ namespace CustomWpfCalendar
                 {
                     int day = previousMax - i + 1;
 
-                    days[index] = new CalendarDay(false, previousMonth.Year, previousMonth.Month, day);
+                    days[index] = new CalendarDay(false, previousMonth.Year, previousMonth.Month, day, true, false);
                     index++;
                 }
             }
 
             for (int i = 0; i < maximumDays; i++)
             {
-                days[index] = new CalendarDay(true, firstDay.Year, firstDay.Month, i + 1);
+                days[index] = new CalendarDay(true, firstDay.Year, firstDay.Month, i + 1, false, false);
                 firstDay = firstDay.AddDays(1);
                 index++;
             }
@@ -204,7 +277,7 @@ namespace CustomWpfCalendar
 
             for (int i = index; i < days.Length; i++)
             {
-                days[index] = new CalendarDay(false, firstDay.Year, firstDay.Month, nextMonthDay);
+                days[index] = new CalendarDay(false, firstDay.Year, firstDay.Month, nextMonthDay, false, true);
                 nextMonthDay++;
                 index++;
                 firstDay = firstDay.AddDays(1);
@@ -213,12 +286,12 @@ namespace CustomWpfCalendar
             return days;
         }
 
-        static int GetPreviousMountDayCount(int dayOfWeek)
+        private static int GetPreviousMountDayCount(int dayOfWeek)
         {
             return (dayOfWeek - GetCurrentFirstDayOfWeek() + MAX_DAYS_WEEK) % MAX_DAYS_WEEK;
         }
 
-        static int GetCurrentFirstDayOfWeek()
+        private static int GetCurrentFirstDayOfWeek()
         {
             return (int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
         }

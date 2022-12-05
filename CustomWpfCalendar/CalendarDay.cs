@@ -6,12 +6,14 @@ namespace CustomWpfCalendar
 {
     internal struct CalendarDay : IEquatable<CalendarDay>
     {
-        public CalendarDay(bool isInCurrentMonth, int year, int month, int day)
+        public CalendarDay(bool isInCurrentMonth, int year, int month, int day, bool isPreviousMonth, bool isNextMonth)
         {
             IsInCurrentMonth = isInCurrentMonth;
             Day = day;
             Year = year;
             Month = month;
+            IsPreviousMonth = isPreviousMonth;
+            IsNextMonth = isNextMonth;
         }
 
         public bool IsInCurrentMonth { get; private set; }
@@ -21,6 +23,7 @@ namespace CustomWpfCalendar
         public int Year { get; private set; }
 
         public int Month { get; private set; }
+
         public Rect TargetRect { get; set; }
 
         public DateTime DateTime
@@ -30,6 +33,10 @@ namespace CustomWpfCalendar
                 return new DateTime(Year, Month, Day);
             }
         }
+
+        public bool IsPreviousMonth { get; private set; }
+
+        public bool IsNextMonth { get; private set; }
 
         public override bool Equals(object? obj)
         {
