@@ -144,12 +144,13 @@ namespace CustomWpfCalendar
                 drawingContext.DrawText(dayText, new Point(i * cellWidth + 20 + ((cellWidth - dayText.Width) / 2), 0));
             }
 
+            // Week numbers
             for (int i = 0; i < 6; i++)
             {
                 var weekNumber = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(new DateTime(DateTime.Year, DateTime.Month, 1).AddDays(i * 7), CalendarWeekRule.FirstFourDayWeek, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek);
 
                 var weekDayText = new FormattedText(weekNumber.ToString(), CultureInfo.CurrentCulture, FlowDirection, typeface, 12, Brushes.Black, pixelsPerDip);
-                var textY = (i * cellHeight) + 20 + (cellHeight - weekDayText.Height);
+                var textY = (i * cellHeight) + 20 + ((cellHeight - weekDayText.Height) / 2);
                 drawingContext.DrawText(weekDayText, new Point(0, textY));
             }
         }
@@ -200,36 +201,8 @@ namespace CustomWpfCalendar
                 dayBrush = NextMonthForeground;
 
             var text = new FormattedText(currentDay.ToString(), CultureInfo.CurrentCulture, FlowDirection, typeface, FontSize, dayBrush, pixelsPerDip);
-            var tX = (j * cellWidth) + 20;
-            var tY = (i * cellHeight + 20);
-
-            switch (HorizontalContentAlignment)
-            {
-                case HorizontalAlignment.Left:
-                    tX = j * cellWidth;
-                    break;
-                case HorizontalAlignment.Center:
-                    tX += (cellWidth - text.Width) / 2;
-                    break;
-                case HorizontalAlignment.Right:
-                    tX += cellWidth - text.Width;
-                    break;
-                case HorizontalAlignment.Stretch:
-                    break;
-            }
-
-            switch (VerticalContentAlignment)
-            {
-                case VerticalAlignment.Top:
-                    tY = i * cellHeight;
-                    break;
-                case VerticalAlignment.Center:
-                    tY += (cellHeight - text.Height) / 2;
-                    break;
-                case VerticalAlignment.Bottom:
-                    tY += cellHeight - text.Height;
-                    break;
-            }
+            var tX = (j * cellWidth) + 30;
+            var tY = (i * cellHeight) + 30;
 
             Point textOrigin = new Point(tX, tY);
             drawingContext.DrawText(text, textOrigin);
