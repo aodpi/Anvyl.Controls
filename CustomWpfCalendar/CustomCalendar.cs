@@ -36,8 +36,8 @@ namespace CustomWpfCalendar
 
             var days = GetDaysArray(DateTime);
 
-            var cellWidth = (RenderSize.Width - 20) / 7;
-            var cellHeight = (RenderSize.Height - 20) / 6;
+            var cellWidth = (RenderSize.Width - 20) / COLS;
+            var cellHeight = (RenderSize.Height - 20) / ROWS;
 
             double pixelsPerDip = VisualTreeHelper.GetDpi(this).PixelsPerDip;
             Typeface typeface = new Typeface(FontFamily, FontStyle, FontWeight, FontStretch);
@@ -65,8 +65,6 @@ namespace CustomWpfCalendar
             }
         }
 
-        public DataTemplate tmpl = new DataTemplate();
-
         private void DrawDayNamesAndWeekNumbers(DrawingContext drawingContext, double cellWidth, double cellHeight, double pixelsPerDip, Typeface typeface)
         {
             var firstDayOfWeek = GetCurrentFirstDayOfWeek();
@@ -81,7 +79,8 @@ namespace CustomWpfCalendar
             // Week numbers
             for (int i = 0; i < 6; i++)
             {
-                var weekNumber = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(new DateTime(DateTime.Year, DateTime.Month, 1).AddDays(i * 7), CalendarWeekRule.FirstFourDayWeek, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek);
+                DateTime dt = new DateTime(DateTime.Year, DateTime.Month, 1).AddDays(i * 7);
+                var weekNumber = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(dt, CalendarWeekRule.FirstFourDayWeek, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek);
 
                 var weekDayText = new FormattedText(weekNumber.ToString(), CultureInfo.CurrentCulture, FlowDirection, typeface, 12, Brushes.Black, pixelsPerDip);
                 var textY = (i * cellHeight) + 20 + ((cellHeight - weekDayText.Height) / 2);
@@ -214,7 +213,7 @@ namespace CustomWpfCalendar
 
             if (hit is not null)
             {
-                MessageBox.Show("You've hit day " + hit.ToString());
+                DateTime = hit.DateTime;
             }
         }
     }
