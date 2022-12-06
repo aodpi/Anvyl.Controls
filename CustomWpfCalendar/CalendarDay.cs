@@ -4,7 +4,7 @@ using System.Windows;
 
 namespace CustomWpfCalendar
 {
-    internal struct CalendarDay : IEquatable<CalendarDay>
+    internal class CalendarDay : IEquatable<CalendarDay?>
     {
         public CalendarDay(bool isInCurrentMonth, int year, int month, int day, bool isPreviousMonth, bool isNextMonth)
         {
@@ -34,40 +34,34 @@ namespace CustomWpfCalendar
             }
         }
 
+        public override string ToString()
+        {
+            return Day.ToString();
+        }
+
         public bool IsPreviousMonth { get; private set; }
 
         public bool IsNextMonth { get; private set; }
 
         public override bool Equals(object? obj)
         {
-            return obj is CalendarDay day && Equals(day);
+            return Equals(obj as CalendarDay);
         }
 
-        public bool Equals(CalendarDay other)
+        public bool Equals(CalendarDay? other)
         {
-            return IsInCurrentMonth == other.IsInCurrentMonth &&
+            return other is not null &&
                    Day == other.Day &&
                    Year == other.Year &&
-                   Month == other.Month &&
-                   EqualityComparer<Rect>.Default.Equals(TargetRect, other.TargetRect);
+                   Month == other.Month;
         }
 
-        public override int GetHashCode()
+        public static bool operator ==(CalendarDay? left, CalendarDay? right)
         {
-            return HashCode.Combine(IsInCurrentMonth, Day, TargetRect);
+            return EqualityComparer<CalendarDay>.Default.Equals(left, right);
         }
 
-        public override string ToString()
-        {
-            return Day.ToString();
-        }
-
-        public static bool operator ==(CalendarDay left, CalendarDay right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(CalendarDay left, CalendarDay right)
+        public static bool operator !=(CalendarDay? left, CalendarDay? right)
         {
             return !(left == right);
         }

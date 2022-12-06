@@ -1,98 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace CustomWpfCalendar
 {
-    public class CustomCalendar : Control
+    public partial class CustomCalendar : FrameworkElement
     {
         private const int MAX_DAYS_WEEK = 7;
         private const int ROWS = 6;
         private const int COLS = 7;
         private List<CalendarDay> calendarDays = new List<CalendarDay>();
 
-        #region Dependency Properties
-
-        public static readonly DependencyProperty DateTimeProperty =
-            DependencyProperty.Register(nameof(DateTime), typeof(DateTime), typeof(CustomCalendar), new PropertyMetadata(DateTime.Now));
-
-        public static readonly DependencyProperty CurrentDayForegroundProperty =
-            DependencyProperty.Register(nameof(CurrentDayForeground), typeof(Brush), typeof(CustomCalendar), new PropertyMetadata(Brushes.Black));
-
-        public static readonly DependencyProperty CurrentDayBackgroundProperty =
-            DependencyProperty.Register(nameof(CurrentDayBackground), typeof(Brush), typeof(CustomCalendar), new PropertyMetadata(Brushes.Beige));
-
-        public static readonly DependencyProperty PreviousMonthForegroundProperty =
-            DependencyProperty.Register(nameof(PreviousMonthForeground), typeof(Brush), typeof(CustomCalendar), new PropertyMetadata(Brushes.DarkGray));
-
-        public static readonly DependencyProperty PreviousMonthBackgroundProperty =
-            DependencyProperty.Register(nameof(PreviousMonthBackground), typeof(Brush), typeof(CustomCalendar), new PropertyMetadata(Brushes.White));
-
-        public static readonly DependencyProperty NextMonthBackgroundProperty =
-            DependencyProperty.Register(nameof(NextMonthBackground), typeof(Brush), typeof(CustomCalendar), new PropertyMetadata(Brushes.White));
-
-        public static readonly DependencyProperty NextMonthForegroundProperty =
-            DependencyProperty.Register(nameof(NextMonthForeground), typeof(Brush), typeof(CustomCalendar), new PropertyMetadata(Brushes.DarkGray));
-
-        #endregion
-
         static CustomCalendar()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomCalendar), new FrameworkPropertyMetadata(typeof(CustomCalendar)));
         }
-
-        #region Binding Properties
-
-        public Brush NextMonthForeground
-        {
-            get { return (Brush)GetValue(NextMonthForegroundProperty); }
-            set { SetValue(NextMonthForegroundProperty, value); }
-        }
-
-        public Brush NextMonthBackground
-        {
-            get { return (Brush)GetValue(NextMonthBackgroundProperty); }
-            set { SetValue(NextMonthBackgroundProperty, value); }
-        }
-
-        public Brush PreviousMonthBackground
-        {
-            get { return (Brush)GetValue(PreviousMonthBackgroundProperty); }
-            set { SetValue(PreviousMonthBackgroundProperty, value); }
-        }
-
-        public Brush PreviousMonthForeground
-        {
-            get { return (Brush)GetValue(PreviousMonthForegroundProperty); }
-            set { SetValue(PreviousMonthForegroundProperty, value); }
-        }
-
-        public DateTime DateTime
-        {
-            get { return (DateTime)GetValue(DateTimeProperty); }
-            set { SetValue(DateTimeProperty, value); }
-        }
-
-        public Brush CurrentDayForeground
-        {
-            get { return (Brush)GetValue(CurrentDayForegroundProperty); }
-            set { SetValue(CurrentDayForegroundProperty, value); }
-        }
-
-        public Brush CurrentDayBackground
-        {
-            get { return (Brush)GetValue(CurrentDayBackgroundProperty); }
-            set { SetValue(CurrentDayBackgroundProperty, value); }
-        }
-
-        #endregion
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
@@ -102,6 +30,8 @@ namespace CustomWpfCalendar
 
         protected override void OnRender(DrawingContext drawingContext)
         {
+            base.OnRender(drawingContext);
+
             calendarDays.Clear();
 
             var days = GetDaysArray(DateTime);
@@ -111,9 +41,11 @@ namespace CustomWpfCalendar
 
             double pixelsPerDip = VisualTreeHelper.GetDpi(this).PixelsPerDip;
             Typeface typeface = new Typeface(FontFamily, FontStyle, FontWeight, FontStretch);
-            Pen dayCellPen = new Pen(BorderBrush, BorderThickness.Top);
+            Pen dayCellPen = new Pen(Brushes.Black, 1);
 
-            drawingContext.DrawRectangle(Background, dayCellPen, new Rect(20, 20, RenderSize.Width - 20, RenderSize.Height - 20));
+            Rect backgroundRect = new Rect(20, 20, RenderSize.Width - 20, RenderSize.Height - 20);
+
+            drawingContext.DrawRectangle(Background, null, backgroundRect);
 
             int index = 0;
             DrawDayNamesAndWeekNumbers(drawingContext, cellWidth, cellHeight, pixelsPerDip, typeface);
@@ -132,6 +64,8 @@ namespace CustomWpfCalendar
                 }
             }
         }
+
+        public DataTemplate tmpl = new DataTemplate();
 
         private void DrawDayNamesAndWeekNumbers(DrawingContext drawingContext, double cellWidth, double cellHeight, double pixelsPerDip, Typeface typeface)
         {
@@ -176,6 +110,7 @@ namespace CustomWpfCalendar
             {
                 drawingContext.DrawRectangle(PreviousMonthBackground, null, Rect.Inflate(cellBorderRect, -.5, -.5));
             }
+            
 
             if (currentDay.IsNextMonth)
             {
@@ -277,7 +212,7 @@ namespace CustomWpfCalendar
 
             var hit = calendarDays.Where(x => x.TargetRect.Contains(position)).FirstOrDefault();
 
-            if (hit != default)
+            if (hit is not null)
             {
                 MessageBox.Show("You've hit day " + hit.ToString());
             }

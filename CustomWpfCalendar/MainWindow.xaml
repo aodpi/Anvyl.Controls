@@ -37,5 +37,6 @@
                               VerticalAlignment="Stretch"
                               Margin="10"
                               Grid.Row="1"></local:CustomCalendar>
+        
     </Grid>
 </Window>

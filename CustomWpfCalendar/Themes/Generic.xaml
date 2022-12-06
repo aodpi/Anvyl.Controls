@@ -7,15 +7,11 @@
     <Style TargetType="{x:Type local:CustomCalendar}">
         <Setter Property="Background" Value="DarkGray"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="BorderBrush" Value="Black"/>
-        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FontStyle" Value="Italic"/>
         <Setter Property="MinWidth" Value="240"/>
         <Setter Property="MinHeight" Value="240"/>
         <Setter Property="FontSize" Value="20"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
     </Style>
