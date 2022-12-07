@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CustomWpfCalendar
+namespace Anvyl.Controls.Extensions
 {
     static class CalendarExtensions
     {

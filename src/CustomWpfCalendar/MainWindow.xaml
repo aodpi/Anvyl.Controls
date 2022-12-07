@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CustomWpfCalendar"
+        xmlns:controls="clr-namespace:Anvyl.Controls;assembly=Anvyl.Controls"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
@@ -11,10 +12,13 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+        <controls:CustomProgressBar HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10"/>
+        
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <fa:ImageAwesome Icon="Calendar" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="DarkGray" Width="20" Height="20" Margin="0,0,25,0"/>
             <TextBlock Text="{Binding Path=DateTime, ElementName=_calendarView}" Margin="0,0,25,0" VerticalAlignment="Center"/>
             <Button Click="Button_Click" Margin="0,5,25,5" Width="60">
@@ -27,7 +31,8 @@
                 <fa:ImageAwesome Icon="ArrowRight"></fa:ImageAwesome>
             </Button>
         </StackPanel>
-        <local:CustomCalendar x:Name="_calendarView" 
+        
+        <controls:CustomCalendar x:Name="_calendarView" 
                               FontStretch="Condensed"
                               FontStyle="Normal"
                               CurrentDayBackground="#0078d7"
@@ -43,7 +48,7 @@
                               HorizontalAlignment="Stretch"
                               VerticalAlignment="Stretch"
                               Margin="10"
-                              Grid.Row="1"></local:CustomCalendar>
+                              Grid.Row="2"></controls:CustomCalendar>
        
         
     </Grid>

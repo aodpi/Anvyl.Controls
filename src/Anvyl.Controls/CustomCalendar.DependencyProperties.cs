@@ -1,8 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Media;
-
-namespace CustomWpfCalendar
+﻿namespace Anvyl.Controls
 {
     public partial class CustomCalendar
     {

@@ -1,7 +1,7 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:CustomWpfCalendar">
+    xmlns:local="clr-namespace:Anvyl.Controls">
 
 
     <Style TargetType="{x:Type local:CustomCalendar}">
@@ -14,5 +14,8 @@
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
+    </Style>
+
+    <Style TargetType="{x:Type local:CustomProgressBar}">
     </Style>
 </ResourceDictionary>

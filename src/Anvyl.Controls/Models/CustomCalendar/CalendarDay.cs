@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
 
-namespace CustomWpfCalendar
+namespace Anvyl.Controls.Models.CustomCalendar
 {
     internal class CalendarDay : IEquatable<CalendarDay?>
     {
@@ -41,10 +39,6 @@ namespace CustomWpfCalendar
             return Day.ToString();
         }
 
-        public bool IsPreviousMonth { get; private set; }
-
-        public bool IsNextMonth { get; private set; }
-
         public override bool Equals(object? obj)
         {
             return Equals(obj as CalendarDay);
@@ -57,6 +51,15 @@ namespace CustomWpfCalendar
                    Year == other.Year &&
                    Month == other.Month;
         }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Day, Year, Month);
+        }
+
+        public bool IsPreviousMonth { get; private set; }
+
+        public bool IsNextMonth { get; private set; }
 
         public static bool operator ==(CalendarDay? left, CalendarDay? right)
         {

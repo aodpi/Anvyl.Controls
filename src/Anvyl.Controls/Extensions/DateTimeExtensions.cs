@@ -1,7 +1,6 @@
 ﻿using System;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace CustomWpfCalendar
+namespace Anvyl.Controls.Extensions
 {
     static class DateTimeExtensions
     {

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Anvyl.Controls.Models.CustomCalendar;
 using System.Globalization;
-using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 
-namespace CustomWpfCalendar
+namespace Anvyl.Controls
 {
     public partial class CustomCalendar : FrameworkElement
     {
@@ -109,7 +105,7 @@ namespace CustomWpfCalendar
             {
                 drawingContext.DrawRectangle(PreviousMonthBackground, null, Rect.Inflate(cellBorderRect, -.5, -.5));
             }
-            
+
 
             if (currentDay.IsNextMonth)
             {
