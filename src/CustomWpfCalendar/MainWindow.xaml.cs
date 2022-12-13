@@ -15,17 +15,14 @@ namespace CustomWpfCalendar
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            _calendarView.DateTime = _calendarView.DateTime.AddMonths(-1);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            _calendarView.DateTime = _calendarView.DateTime.AddMonths(1);
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            _calendarView.DateTime = DateTime.Now;
         }
     }
 }

@@ -6,49 +6,16 @@
         xmlns:local="clr-namespace:CustomWpfCalendar"
         xmlns:controls="clr-namespace:Anvyl.Controls;assembly=Anvyl.Controls"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:sp="clr-namespace:WPFSpark;assembly=WPFSpark"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <controls:Loader Width="40" TickCount="20" Height="40" Margin="0,80,0,0"/>
 
-        <controls:CustomProgressBar CornerRadius="10" IsIndeterminate="True" Maximum="40" Value="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10"/>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <fa:ImageAwesome Icon="Calendar" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="DarkGray" Width="20" Height="20" Margin="0,0,25,0"/>
-            <TextBlock Text="{Binding Path=DateTime, ElementName=_calendarView}" Margin="0,0,25,0" VerticalAlignment="Center"/>
-            <Button Click="Button_Click" Margin="0,5,25,5" Width="60">
-                <fa:ImageAwesome Icon="ArrowLeft"></fa:ImageAwesome>
-            </Button>
-            <Button Width="60" Click="Button_Click_2" Margin="0,5,25,5">
-                <fa:ImageAwesome Icon="Bullseye"></fa:ImageAwesome>
-            </Button>
-            <Button Click="Button_Click_1" Width="60" Margin="0,5,0,5">
-                <fa:ImageAwesome Icon="ArrowRight"></fa:ImageAwesome>
-            </Button>
-        </StackPanel>
-        
-        <controls:CustomCalendar x:Name="_calendarView" 
-                              FontStretch="Condensed"
-                              FontStyle="Normal"
-                              CurrentDayBackground="#0078d7"
-                              CurrentDayForeground="White"
-                              Background="White"
-                              Foreground="Black"
-                              PreviousMonthBackground="DarkGray"
-                              PreviousMonthForeground="White"
-                              NextMonthBackground="DarkGray"
-                              NextMonthForeground="White"
-                              FontWeight="Bold"
-                              FontSize="24"
-                              HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch"
-                              Margin="10"
-                              Grid.Row="2"></controls:CustomCalendar>
-       
-        
+        <sp:SprocketControl Width="40" Height="40" TickCount="20"></sp:SprocketControl>
+
+        <controls:CustomCalendar Background="DarkGray" NextMonthForeground="White" NextMonthBackground="Black" PreviousMonthBackground="Magenta" PreviousMonthForeground="White"
+                                 ></controls:CustomCalendar>
     </Grid>
 </Window>

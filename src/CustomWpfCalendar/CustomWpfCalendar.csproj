@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
+    <PackageReference Include="WPFSpark" Version="1.5.0" />
   </ItemGroup>
 
   <ItemGroup>
