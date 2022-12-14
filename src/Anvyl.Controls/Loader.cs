@@ -1,65 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
-using System.Windows.Media.Animation;
+﻿using System.Windows.Media.Animation;
+using Anvyl.Controls.Models.Loader;
 
 namespace Anvyl.Controls
 {
-    internal struct LoaderTick : IEquatable<LoaderTick>
-    {
-        public LoaderTick(Point start, Point end, double angle)
-        {
-            Start = start;
-            End = end;
-            Angle = angle;
-        }
-
-        /// <summary>
-        /// Start point of this tick
-        /// </summary>
-        public Point Start { get; private set; }
-
-        /// <summary>
-        /// End point of this tick
-        /// </summary>
-        public Point End { get; private set; }
-
-        public double Angle { get; private set; }
-
-        public override bool Equals(object? obj)
-        {
-            return obj is LoaderTick tick && Equals(tick);
-        }
-
-        public bool Equals(LoaderTick other)
-        {
-            return EqualityComparer<Point>.Default.Equals(Start, other.Start) &&
-                   EqualityComparer<Point>.Default.Equals(End, other.End);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Start, End);
-        }
-
-        public static bool operator ==(LoaderTick left, LoaderTick right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(LoaderTick left, LoaderTick right)
-        {
-            return !(left == right);
-        }
-    }
-
     public class Loader : FrameworkElement
     {
-
-
         public int TickCount
         {
             get { return (int)GetValue(TickCountProperty); }
@@ -70,17 +15,30 @@ namespace Anvyl.Controls
         public static readonly DependencyProperty TickCountProperty =
             DependencyProperty.Register(nameof(TickCount), typeof(int), typeof(Loader), new PropertyMetadata(12));
 
+
+
+        public Color Foreground
+        {
+            get { return (Color)GetValue(ForegroundProperty); }
+            set { SetValue(ForegroundProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Foreground.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ForegroundProperty =
+            DependencyProperty.Register(nameof(Foreground), typeof(Color), typeof(Loader), new PropertyMetadata(Colors.Black));
+
+
         protected override void OnRender(DrawingContext drawingContext)
         {
             var ticks = CalculateTicks();
             var alpha = 0.1d;
-            var alphaChange = (1 / (double)TickCount);
+            var alphaChange = 1 / (double)TickCount;
 
             Point center = new Point(RenderSize.Width / 2, RenderSize.Height / 2);
-           
+
             for (int i = 0; i < ticks.Length; i++)
             {
-                var brush = new SolidColorBrush(Colors.Black);
+                var brush = new SolidColorBrush(Foreground);
                 brush.Opacity = alpha;
 
                 var pen = new Pen(brush, 3)
@@ -108,17 +66,16 @@ namespace Anvyl.Controls
                 RepeatBehavior = RepeatBehavior.Forever,
             };
 
-            var keyFrames = pointAnim.KeyFrames;
-            var step = 360 / TickCount;
+            var step = 360 / (double)TickCount;
 
-            for (int i = step; i < 361; i += step)
+            for (double i = step; i < 361d; i += step)
             {
                 PointKeyFrame keyframe = new DiscretePointKeyFrame
                 {
                     Value = refPoint.Rotate(i, center),
                 };
 
-                keyFrames.Add(keyframe);
+                pointAnim.KeyFrames.Add(keyframe);
             }
 
             return pointAnim;
@@ -128,7 +85,7 @@ namespace Anvyl.Controls
         {
             var ticks = new LoaderTick[TickCount];
 
-            var angleIncrement = (360d / TickCount);
+            var angleIncrement = 360d / TickCount;
 
             var width = RenderSize.Width < RenderSize.Height ? RenderSize.Width : RenderSize.Height;
             var centerPoint = new Point(RenderSize.Width / 2, RenderSize.Height / 2);
@@ -145,13 +102,13 @@ namespace Anvyl.Controls
                 var sin = (float)Math.Sin(angleInRadians);
 
                 var start = new Point(innerRadius * cos, innerRadius * sin);
-                start.Offset(RenderSize.Width / 2, RenderSize.Height / 2);
+                start.Offset(centerPoint.X, centerPoint.Y);
 
                 var end = new Point(outerRadius * cos, outerRadius * sin);
-                end.Offset(RenderSize.Width / 2, RenderSize.Height / 2);
+                end.Offset(centerPoint.X, centerPoint.Y);
 
                 ticks[i] = new LoaderTick(start, end, angle);
-                
+
                 angle += angleIncrement;
             }
 

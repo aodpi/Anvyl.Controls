@@ -2,6 +2,8 @@
 	<File Reference="Anvyl.Controls.dll">
 		<ToolboxItems UIFramework="WPF" VSCategory="Anvyl Controls" BlendCategory="Anvyl Controls">
 			<Item Type="Anvyl.Controls.CustomCalendar"/>
+			<Item Type="Anvyl.Controls.Loader"/>
+			<Item Type="Anvyl.Controls.CustomProgressBar"/>
 		</ToolboxItems>
 	</File>
 </FileList>

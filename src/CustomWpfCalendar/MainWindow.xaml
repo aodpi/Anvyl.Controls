@@ -4,18 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CustomWpfCalendar"
-        xmlns:controls="clr-namespace:Anvyl.Controls;assembly=Anvyl.Controls"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
-        xmlns:sp="clr-namespace:WPFSpark;assembly=WPFSpark"
+        xmlns:ac="https://github.com/aodpi/Anvyl.Controls"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     
     <Grid>
-        <controls:Loader Width="40" TickCount="20" Height="40" Margin="0,80,0,0"/>
-
-        <sp:SprocketControl Width="40" Height="40" TickCount="20"></sp:SprocketControl>
-
-        <controls:CustomCalendar Background="DarkGray" NextMonthForeground="White" NextMonthBackground="Black" PreviousMonthBackground="Magenta" PreviousMonthForeground="White"
-                                 ></controls:CustomCalendar>
+        <ac:Loader Width="40" Height="40" Foreground="Magenta"></ac:Loader>
     </Grid>
 </Window>
