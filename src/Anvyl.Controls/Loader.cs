@@ -1,10 +1,12 @@
-﻿using System.Windows.Media.Animation;
+﻿using System.ComponentModel;
+using System.Windows.Media.Animation;
 using Anvyl.Controls.Models.Loader;
 
 namespace Anvyl.Controls
 {
     public class Loader : FrameworkElement
     {
+        [Category("Common")]
         public int TickCount
         {
             get { return (int)GetValue(TickCountProperty); }
@@ -17,6 +19,7 @@ namespace Anvyl.Controls
 
 
 
+        [Category("Brush")]
         public Color Foreground
         {
             get { return (Color)GetValue(ForegroundProperty); }

@@ -10,13 +10,21 @@
 		<Title>Anvyl.Controls</Title>
 		<Description>A collection of custom WPF controls</Description>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageVersion>0.1.0-alpha2</PackageVersion>
+		<PackageVersion>0.1.0-alpha5</PackageVersion>
 		<IncludeSymbols>True</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<Authors>aodpi</Authors>
 		<PackageProjectUrl>https://github.com/aodpi/Anvyl.Controls</PackageProjectUrl>
 		<PackageTags>WPF;Windows;dotnet;Controls;CustomControls;Calendar</PackageTags>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Icons\Anvyl.Controls.Loader.icon.bmp" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\Icons\Anvyl.Controls.Loader.icon.bmp" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />
@@ -27,10 +35,6 @@
 	  <Using Include="Anvyl.Controls.Models" />
 	  <Using Include="System.Windows" />
 	  <Using Include="System.Windows.Media" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Resources\Icons\" />
 	</ItemGroup>
 
 </Project>
