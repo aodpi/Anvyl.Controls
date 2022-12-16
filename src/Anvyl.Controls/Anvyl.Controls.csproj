@@ -16,25 +16,30 @@
 		<Authors>aodpi</Authors>
 		<PackageProjectUrl>https://github.com/aodpi/Anvyl.Controls</PackageProjectUrl>
 		<PackageTags>WPF;Windows;dotnet;Controls;CustomControls;Calendar</PackageTags>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Icons\Anvyl.Controls.Loader.icon.bmp" />
+		<None Remove="Resources\Icons\Anvyl.Controls.Loader.icon.bmp" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="Resources\Icons\Anvyl.Controls.Loader.icon.bmp" />
+		<EmbeddedResource Include="Resources\Icons\Anvyl.Controls.Loader.icon.bmp" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Include="..\..\README.md">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
 		<None Include="VisualStudioToolsManifest.xml" Pack="true" PackagePath="tools" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Using Include="Anvyl.Controls.Extensions" />
-	  <Using Include="Anvyl.Controls.Models" />
-	  <Using Include="System.Windows" />
-	  <Using Include="System.Windows.Media" />
+		<Using Include="Anvyl.Controls.Extensions" />
+		<Using Include="Anvyl.Controls.Models" />
+		<Using Include="System.Windows" />
+		<Using Include="System.Windows.Media" />
 	</ItemGroup>
 
 </Project>
