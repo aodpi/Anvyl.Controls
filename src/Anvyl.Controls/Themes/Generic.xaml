@@ -18,4 +18,10 @@
 
     <Style TargetType="{x:Type local:CustomProgressBar}">
     </Style>
+
+    <Style TargetType="{x:Type local:Loader}">
+        <Setter Property="MinWidth" Value="20"/>
+        <Setter Property="MinHeight" Value="20"/>
+        <Setter Property="Margin" Value="0"/>
+    </Style>
 </ResourceDictionary>

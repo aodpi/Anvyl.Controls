@@ -15,14 +15,14 @@ namespace Anvyl.Controls.Models.Loader
         /// <summary>
         /// Start point of this tick
         /// </summary>
-        public Point Start { get; private set; }
+        public Point Start { get; init; }
 
         /// <summary>
         /// End point of this tick
         /// </summary>
-        public Point End { get; private set; }
+        public Point End { get; init; }
 
-        public double Angle { get; private set; }
+        public double Angle { get; init; }
 
         public override bool Equals(object? obj)
         {

@@ -1,23 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Anvyl.Controls.Extensions
+﻿namespace Anvyl.Controls.Extensions
 {
-    public static class PointExtensions
+    internal static class PointExtensions
     {
-
         /// <summary>
         /// Calculate the distance between current and specified point
         /// </summary>
         /// <param name="point"></param>
         /// <param name="point2"></param>
         /// <returns></returns>
-        public static double Distance(this Point point, Point point2)
+        public static double Distance(this ref Point point, Point point2)
         {
             var dx = point.X - point2.X;
             var dy = point.Y - point2.Y;
@@ -26,14 +17,25 @@ namespace Anvyl.Controls.Extensions
             return Math.Sqrt(ls);
         }
 
-        public static double DistanceSquared(this Point point, Point point2)
+        /// <summary>
+        /// Distance squared between two points.
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="point2"></param>
+        /// <returns></returns>
+        public static double DistanceSquared(this ref Point point, Point point2)
         {
             var dx = point.X - point2.X;
             var dy = point.Y - point2.Y;
             return dx * dx + dy * dy;
         }
 
-        public static Point Normalize(this Point point)
+        /// <summary>
+        /// Normalize a point so it hase length of 1.
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public static Point Normalize(this ref Point point)
         {
             var ls = Math.Max(Math.Abs(point.X), Math.Abs(point.Y));
             var x = point.X / ls;
@@ -43,20 +45,35 @@ namespace Anvyl.Controls.Extensions
             return new Point(x / len, y / len);
         }
 
-        public static Point Rotate(this Point point, double degrees)
+        /// <summary>
+        /// Rotate a point by the specified angle (in degrees) clockwise
+        /// relative to origin (0,0)
+        /// </summary>
+        /// <param name="point">Point to rotate</param>
+        /// <param name="angle">Degrees to rotate</param>
+        /// <returns></returns>
+        public static Point Rotate(this ref Point point, double angle)
         {
-            return Rotate(point, degrees, new Point());
+            return Rotate(ref point, angle, new Point());
         }
 
-        public static Point Rotate(this Point point, double angle, Point center)
+        /// <summary>
+        /// Rotate a point by the specified angle (in degrees) clockwise relative 
+        /// to the provided origin.
+        /// </summary>
+        /// <param name="point">Point to rotate</param>
+        /// <param name="angle">Degrees to rotate</param>
+        /// <param name="origin">Origin of rotation</param>
+        /// <returns></returns>
+        public static Point Rotate(this ref Point point, double angle, Point origin)
         {
             var angleInRadians = angle.ToRadians();
 
             float cos = (float)Math.Cos(angleInRadians);
             float sin = (float)Math.Sin(angleInRadians);
             
-            var x = (point.X - center.X) * cos - (point.Y - center.Y) * sin + center.X;
-            var y = (point.X - center.X) * sin + (point.Y - center.Y) * cos + center.Y;
+            var x = (point.X - origin.X) * cos - (point.Y - origin.Y) * sin + origin.X;
+            var y = (point.X - origin.X) * sin + (point.Y - origin.Y) * cos + origin.Y;
             
             return new Point(x, y);
         }
@@ -66,7 +83,7 @@ namespace Anvyl.Controls.Extensions
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public static double Length(this Point point)
+        public static double Length(this ref Point point)
         {
             return Math.Sqrt(point.X * point.X + point.Y * point.Y);
         }
@@ -76,7 +93,7 @@ namespace Anvyl.Controls.Extensions
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public static double LengthSquared(this Point point)
+        public static double LengthSquared(this ref Point point)
         {
             return point.X * point.X + point.Y * point.Y;
         }
@@ -87,12 +104,13 @@ namespace Anvyl.Controls.Extensions
         /// <param name="point1">Curreent point</param>
         /// <param name="point2">Other point</param>
         /// <returns></returns>
-        public static double AngleBetween(this Point point1, Point point2)
+        public static double AngleBetween(this ref Point point1, Point point2)
         {
             double sin = point1.X * point2.Y - point2.X * point1.Y;
             double cos = point1.X * point2.X + point2.Y * point1.X;
+            double tan = Math.Atan2(sin, cos);
 
-            return Math.Atan2(sin, cos).ToDegrees();
+            return tan.ToDegrees();
         }
     }
 }

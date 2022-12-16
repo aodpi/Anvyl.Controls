@@ -2,7 +2,7 @@
 
 namespace Anvyl.Controls.Extensions
 {
-    static class CalendarExtensions
+    internal static class CalendarExtensions
     {
         public static int GetMaxDaysInMonth(this System.Globalization.Calendar c, DateTime time)
         {

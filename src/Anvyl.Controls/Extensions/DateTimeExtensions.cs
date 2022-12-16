@@ -2,7 +2,7 @@
 
 namespace Anvyl.Controls.Extensions
 {
-    static class DateTimeExtensions
+    internal static class DateTimeExtensions
     {
         public static DateTime FirstDayInMonth(this DateTime time)
         {

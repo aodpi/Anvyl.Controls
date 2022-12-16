@@ -10,6 +10,6 @@
         Title="MainWindow" Height="450" Width="800">
     
     <Grid>
-        <ac:Loader Width="40" Height="40" Foreground="Magenta"></ac:Loader>
+        <ac:Loader HorizontalAlignment="Center" VerticalAlignment="Center"></ac:Loader>
     </Grid>
 </Window>

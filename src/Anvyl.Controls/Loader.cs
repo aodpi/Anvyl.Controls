@@ -4,64 +4,50 @@ using Anvyl.Controls.Models.Loader;
 
 namespace Anvyl.Controls
 {
-    public class Loader : FrameworkElement
+    public partial class Loader : FrameworkElement
     {
-        [Category("Common")]
-        public int TickCount
+        static Loader()
         {
-            get { return (int)GetValue(TickCountProperty); }
-            set { SetValue(TickCountProperty, value); }
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(Loader), new FrameworkPropertyMetadata(typeof(Loader)));
         }
-
-        // Using a DependencyProperty as the backing store for TickCount.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty TickCountProperty =
-            DependencyProperty.Register(nameof(TickCount), typeof(int), typeof(Loader), new PropertyMetadata(12));
-
-
-
-        [Category("Brush")]
-        public Color Foreground
-        {
-            get { return (Color)GetValue(ForegroundProperty); }
-            set { SetValue(ForegroundProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for Foreground.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ForegroundProperty =
-            DependencyProperty.Register(nameof(Foreground), typeof(Color), typeof(Loader), new PropertyMetadata(Colors.Black));
-
 
         protected override void OnRender(DrawingContext drawingContext)
         {
             var ticks = CalculateTicks();
-            var alpha = 0.1d;
+            var alpha = TickDirection == SweepDirection.Clockwise ? 0.1d : 1d;
+
             var alphaChange = 1 / (double)TickCount;
 
             Point center = new Point(RenderSize.Width / 2, RenderSize.Height / 2);
 
             for (int i = 0; i < ticks.Length; i++)
             {
-                var brush = new SolidColorBrush(Foreground);
-                brush.Opacity = alpha;
-
-                var pen = new Pen(brush, 3)
+                var brush = new SolidColorBrush(Foreground)
                 {
-                    EndLineCap = PenLineCap.Round,
-                    StartLineCap = PenLineCap.Round
+                    Opacity = alpha
+                };
+
+                var pen = new Pen(brush, TickWidth)
+                {
+                    StartLineCap = TickStartStyle,
+                    EndLineCap = TickEndStyle,
                 };
 
                 var tick = ticks[i];
 
-                var p1 = CreatePointAnimation(tick.Start, center);
-                var p2 = CreatePointAnimation(tick.End, center);
+                var p1 = CreateTickPointAnimation(tick.Start, center);
+                var p2 = CreateTickPointAnimation(tick.End, center);
 
                 drawingContext.DrawLine(pen, tick.Start, p1.CreateClock(), tick.End, p2.CreateClock());
 
-                alpha += alphaChange;
+                if (TickDirection == SweepDirection.Clockwise)
+                    alpha += alphaChange;
+                else
+                    alpha -= alphaChange;
             }
         }
 
-        private PointAnimationBase CreatePointAnimation(Point refPoint, Point center)
+        private PointAnimationBase CreateTickPointAnimation(Point refPoint, Point center)
         {
             var pointAnim = new PointAnimationUsingKeyFrames
             {
@@ -73,9 +59,14 @@ namespace Anvyl.Controls
 
             for (double i = step; i < 361d; i += step)
             {
+                var stepIncrement = i;
+
+                if (TickDirection == SweepDirection.Counterclockwise)
+                    stepIncrement = -i;
+
                 PointKeyFrame keyframe = new DiscretePointKeyFrame
                 {
-                    Value = refPoint.Rotate(i, center),
+                    Value = refPoint.Rotate(stepIncrement, center),
                 };
 
                 pointAnim.KeyFrames.Add(keyframe);

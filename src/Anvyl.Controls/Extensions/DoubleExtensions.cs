@@ -1,16 +1,16 @@
 ﻿namespace Anvyl.Controls.Extensions
 {
-    public static class DoubleExtensions
+    internal static class DoubleExtensions
     {
         private const double degreeToRadians = Math.PI / 180;
         private const double radiansToDegrees = 180 / Math.PI;
 
-        public static double ToRadians(this double value)
+        public static double ToRadians(this ref double value)
         {
             return value * degreeToRadians;
         }
 
-        public static double ToDegrees(this double value)
+        public static double ToDegrees(this ref double value)
         {
             return value * radiansToDegrees;
         }
