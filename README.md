@@ -14,5 +14,15 @@ A calendar month view that takes System first day of week and displays week numb
 
 An indeterminate progress loader to display that an action is in progress. Customizable.
 
+| Property  | Type  | Description                      |
+| --------- | ----- | -----------                      |
+| TickCount | `int` | Total number of ticks to display. **Default:** 12 |
+| Foreground | `Color` | Foreground color of the ticks. **Default:** Black |
+| TickStartStyle | `PenLineCap` | Style of the ticks at start (from center). **Default:** Square |
+| TickEndStyle | `PenLineCap` | Style of the ticks at the end (from center). **Default:** Square |
+| TickWidth | `double` | Thickness of each tick. **Default:** 1 |
+| TickDirection | `SweepDirection` | Rotation direction of the Loader (Clockwise or CounterClockwise). **Default:** Clockwise |
+
+
 ![image](https://user-images.githubusercontent.com/6562956/208063324-26df18f7-7a78-46ac-8bcf-2a532089dff6.png)
 ![image](https://user-images.githubusercontent.com/6562956/208063496-715dcbfe-fbea-4ccd-b812-c108893e01b7.png)
