@@ -1,6 +1,9 @@
 ﻿using Anvyl.Controls.Models.CustomCalendar;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -16,12 +19,6 @@ namespace Anvyl.Controls
         static CustomCalendar()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomCalendar), new FrameworkPropertyMetadata(typeof(CustomCalendar)));
-        }
-
-        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
-        {
-            base.OnPropertyChanged(e);
-            InvalidateVisual();
         }
 
         protected override void OnRender(DrawingContext drawingContext)

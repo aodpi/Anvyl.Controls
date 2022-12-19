@@ -52,9 +52,9 @@
         /// <param name="point">Point to rotate</param>
         /// <param name="angle">Degrees to rotate</param>
         /// <returns></returns>
-        public static Point Rotate(this ref Point point, double angle)
+        public static Point Rotate(this Point point, double angle)
         {
-            return Rotate(ref point, angle, new Point());
+            return Rotate(point, angle, new Point());
         }
 
         /// <summary>
@@ -65,7 +65,7 @@
         /// <param name="angle">Degrees to rotate</param>
         /// <param name="origin">Origin of rotation</param>
         /// <returns></returns>
-        public static Point Rotate(this ref Point point, double angle, Point origin)
+        public static Point Rotate(this Point point, double angle, Point origin)
         {
             var angleInRadians = angle.ToRadians();
 
