@@ -145,5 +145,19 @@ namespace Anvyl.Controls.Extensions
 
             return new Point(x, y);
         }
+
+        public static Point Lerp(this Point point, Point other, double amount)
+        {
+            return new Point(
+                point.X + (other.X - point.X) * amount,
+                point.Y + (other.Y - point.Y) * amount);
+        }
+
+        public static Point MidPoint(this Point point, Point other)
+        {
+            return new Point(
+                (point.X + other.X) / 2.0,
+                (point.Y + other.Y) / 2.0);
+        }
     }
 }
