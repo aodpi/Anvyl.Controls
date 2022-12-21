@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Numerics;
 
 namespace Anvyl.Controls.Extensions
 {
@@ -10,7 +11,7 @@ namespace Anvyl.Controls.Extensions
         /// <param name="point"></param>
         /// <param name="point2"></param>
         /// <returns></returns>
-        public static double Distance(this ref Point point, Point point2)
+        public static double Distance(this Point point, Point point2)
         {
             var dx = point.X - point2.X;
             var dy = point.Y - point2.Y;
@@ -25,7 +26,7 @@ namespace Anvyl.Controls.Extensions
         /// <param name="point"></param>
         /// <param name="point2"></param>
         /// <returns></returns>
-        public static double DistanceSquared(this ref Point point, Point point2)
+        public static double DistanceSquared(this Point point, Point point2)
         {
             var dx = point.X - point2.X;
             var dy = point.Y - point2.Y;
@@ -37,14 +38,13 @@ namespace Anvyl.Controls.Extensions
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public static Point Normalize(this ref Point point)
+        public static Point Normalize(this Point point)
         {
-            var ls = Math.Max(Math.Abs(point.X), Math.Abs(point.Y));
-            var x = point.X / ls;
-            var y = point.Y / ls;
-            var len = point.Length();
+            var length = point.Length();
+            var x = point.X / length;
+            var y = point.Y / length;
 
-            return new Point(x / len, y / len);
+            return new Point(x, y);
         }
 
         /// <summary>
@@ -57,6 +57,24 @@ namespace Anvyl.Controls.Extensions
         public static Point Rotate(this Point point, double angle)
         {
             return Rotate(point, angle, new Point());
+        }
+
+
+        /// <summary>
+        /// Find the reflected point based on another point
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="other">Reference point</param>
+        /// <returns></returns>
+        public static Point Reflect(this Point point, Point other)
+        {
+            var normal = other.Normalize();
+
+            var dot = point.X * normal.X + point.Y * normal.Y;
+            var x = 2 * dot * normal.X - point.X;
+            var y = 2 * dot * normal.Y - point.Y;
+
+            return new Point(x, y);
         }
 
         /// <summary>
@@ -87,7 +105,7 @@ namespace Anvyl.Controls.Extensions
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public static double Length(this ref Point point)
+        public static double Length(this Point point)
         {
             return Math.Sqrt(point.X * point.X + point.Y * point.Y);
         }
@@ -97,7 +115,7 @@ namespace Anvyl.Controls.Extensions
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        public static double LengthSquared(this ref Point point)
+        public static double LengthSquared(this Point point)
         {
             return point.X * point.X + point.Y * point.Y;
         }
@@ -108,22 +126,24 @@ namespace Anvyl.Controls.Extensions
         /// <param name="point1">Curreent point</param>
         /// <param name="point2">Other point</param>
         /// <returns></returns>
-        public static double AngleBetween(this ref Point point1, Point point2)
+        public static double AngleBetween(this Point point1, Point point2)
         {
             double sin = point1.X * point2.Y - point2.X * point1.Y;
             double cos = point1.X * point2.X + point2.Y * point1.X;
             double tan = Math.Atan2(sin, cos);
-            
+
             return tan.ToDegrees();
         }
 
         public static Point Project(this Point point, Point point2)
         {
-            var dotX = point.X * point2.X / (point2.X * point2.X) * point2.X;
-            var dotY = point.Y * point2.Y / (point2.Y * point2.Y) * point2.Y;
-            
-            return new Point(dotX, dotY);
+            var dotProduct = point.X * point2.X + point.Y * point2.Y;
+            var dotB = point2.X * point2.X + (point2.Y * point2.Y);
 
+            var x = (dotProduct / dotB) * point2.X;
+            var y = (dotProduct / dotB) * point2.Y;
+
+            return new Point(x, y);
         }
     }
 }
