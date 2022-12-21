@@ -8,6 +8,6 @@
         Title="MainWindow" Height="450" Width="800">
 
     <Grid>
-        <ac:CircleProgressBar Width="80" Height="80" Value="500" Minimum="0" Maximum="1000" SnapsToDevicePixels="True" Foreground="Blue" Background="Transparent"></ac:CircleProgressBar>
+        <ac:CircleProgressBar x:Name="test" Width="80" Height="80" Value="800" StrokeThickness="2" Minimum="0" Maximum="1000" SnapsToDevicePixels="True" Foreground="Blue" Background="DarkGray"></ac:CircleProgressBar>
     </Grid>
 </Window>

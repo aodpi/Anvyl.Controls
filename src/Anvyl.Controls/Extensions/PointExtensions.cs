@@ -1,4 +1,6 @@
-﻿namespace Anvyl.Controls.Extensions
+﻿using System.Diagnostics;
+
+namespace Anvyl.Controls.Extensions
 {
     internal static class PointExtensions
     {
@@ -67,14 +69,16 @@
         /// <returns></returns>
         public static Point Rotate(this Point point, double angle, Point origin)
         {
+            Debug.Assert(angle != double.NaN);
+
             var angleInRadians = angle.ToRadians();
 
             float cos = (float)Math.Cos(angleInRadians);
             float sin = (float)Math.Sin(angleInRadians);
-            
+
             var x = (point.X - origin.X) * cos - (point.Y - origin.Y) * sin + origin.X;
             var y = (point.X - origin.X) * sin + (point.Y - origin.Y) * cos + origin.Y;
-            
+
             return new Point(x, y);
         }
 
@@ -109,8 +113,17 @@
             double sin = point1.X * point2.Y - point2.X * point1.Y;
             double cos = point1.X * point2.X + point2.Y * point1.X;
             double tan = Math.Atan2(sin, cos);
-
+            
             return tan.ToDegrees();
+        }
+
+        public static Point Project(this Point point, Point point2)
+        {
+            var dotX = point.X * point2.X / (point2.X * point2.X) * point2.X;
+            var dotY = point.Y * point2.Y / (point2.Y * point2.Y) * point2.Y;
+            
+            return new Point(dotX, dotY);
+
         }
     }
 }
