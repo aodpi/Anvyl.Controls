@@ -5,10 +5,10 @@ namespace Anvyl.Controls
 	public partial class Loader
     {
 		public static readonly DependencyProperty TickCountProperty =
-			DependencyProperty.Register(nameof(TickCount), typeof(int), typeof(Loader), new FrameworkPropertyMetadata(12, FrameworkPropertyMetadataOptions.AffectsRender), ValidateTickCountProperty);
+			DependencyProperty.Register(nameof(TickCount), typeof(int), typeof(Loader), new FrameworkPropertyMetadata(12, FrameworkPropertyMetadataOptions.AffectsRender));
 
 		public static readonly DependencyProperty ForegroundProperty =
-			DependencyProperty.Register(nameof(Foreground), typeof(Color), typeof(Loader), new FrameworkPropertyMetadata(Colors.Black, FrameworkPropertyMetadataOptions.AffectsRender));
+			DependencyProperty.Register(nameof(Foreground), typeof(Brush), typeof(Loader), new FrameworkPropertyMetadata(Brushes.Black, FrameworkPropertyMetadataOptions.AffectsRender));
 
 		public static readonly DependencyProperty TickStartStyleProperty =
 			DependencyProperty.Register(nameof(TickStartStyle), typeof(PenLineCap), typeof(Loader), new FrameworkPropertyMetadata(PenLineCap.Square, FrameworkPropertyMetadataOptions.AffectsRender));
@@ -37,9 +37,9 @@ namespace Anvyl.Controls
 		/// Foreground color of the ticks
 		/// </summary>
 		[Category("Brush")]
-		public Color Foreground
+		public Brush Foreground
 		{
-			get { return (Color)GetValue(ForegroundProperty); }
+			get { return (Brush)GetValue(ForegroundProperty); }
 			set { SetValue(ForegroundProperty, value); }
 		}
 
@@ -82,18 +82,6 @@ namespace Anvyl.Controls
 		{
 			get { return (SweepDirection)GetValue(TickDirectionProperty); }
 			set { SetValue(TickDirectionProperty, value); }
-		}
-
-		/// <summary>
-		/// Rendering a lot of ticks is consuming so limit it to about 200.
-		/// </summary>
-		/// <param name="value">Value of current tick count.</param>
-		/// <returns>True if tick count is valid, false otherwise</returns>
-		private static bool ValidateTickCountProperty(object value)
-		{
-			var val = (int)value;
-
-			return val > 0 && val <= 200;
 		}
 	}
 }

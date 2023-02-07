@@ -4,109 +4,113 @@ using Anvyl.Controls.Models.Loader;
 
 namespace Anvyl.Controls
 {
-    public partial class Loader : FrameworkElement
-    {
-        static Loader()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(Loader), new FrameworkPropertyMetadata(typeof(Loader)));
-        }
+	public partial class Loader : FrameworkElement
+	{
+		static Loader()
+		{
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(Loader), new FrameworkPropertyMetadata(typeof(Loader)));
+		}
 
-        protected override void OnRender(DrawingContext drawingContext)
-        {
-            var ticks = CalculateTicks();
-            var alpha = TickDirection == SweepDirection.Clockwise ? 0.1d : 1d;
+		protected override void OnRender(DrawingContext drawingContext)
+		{
+			var ticks = CalculateTicks();
+			var alpha = TickDirection == SweepDirection.Clockwise ? 0.1d : 1d;
 
-            var alphaChange = 1 / (double)TickCount;
+			var alphaChange = 1 / (double)TickCount;
 
-            Point center = new Point(RenderSize.Width / 2, RenderSize.Height / 2);
+			Point center = new Point(RenderSize.Width / 2, RenderSize.Height / 2);
 
-            for (int i = 0; i < ticks.Length; i++)
-            {
-                var brush = new SolidColorBrush(Foreground)
-                {
-                    Opacity = alpha
-                };
+			// Rotate transform with animation.
+			RotateTransform rotate = GetRotateTransform(center);
 
-                var pen = new Pen(brush, TickWidth)
-                {
-                    StartLineCap = TickStartStyle,
-                    EndLineCap = TickEndStyle,
-                };
+			drawingContext.PushTransform(rotate);
 
-                var tick = ticks[i];
+			for (int i = 0; i < ticks.Length; i++)
+			{
+				var brush = Foreground.Clone();
 
-                var p1 = CreateTickPointAnimation(tick.Start, center);
-                var p2 = CreateTickPointAnimation(tick.End, center);
+				brush.Opacity = alpha;
 
-                drawingContext.DrawLine(pen, tick.Start, p1.CreateClock(), tick.End, p2.CreateClock());
+				var pen = new Pen(brush, TickWidth)
+				{
+					StartLineCap = TickStartStyle,
+					EndLineCap = TickEndStyle,
+				};
 
-                if (TickDirection == SweepDirection.Clockwise)
-                    alpha += alphaChange;
-                else
-                    alpha -= alphaChange;
-            }
-        }
+				var tick = ticks[i];
 
-        private PointAnimationBase CreateTickPointAnimation(Point refPoint, Point center)
-        {
-            var pointAnim = new PointAnimationUsingKeyFrames
-            {
-                Duration = TimeSpan.FromMilliseconds(TickCount * 60),
-                RepeatBehavior = RepeatBehavior.Forever,
-            };
+				drawingContext.DrawLine(pen, tick.Start, tick.End);
 
-            var step = 360 / (double)TickCount;
+				if (TickDirection == SweepDirection.Clockwise)
+					alpha += alphaChange;
+				else
+					alpha -= alphaChange;
+			}
+		}
 
-            for (double i = step; i < 361d; i += step)
-            {
-                var stepIncrement = i;
+		private RotateTransform GetRotateTransform(Point center)
+		{
+			RotateTransform rotate = new RotateTransform(0, center.X, center.Y);
 
-                if (TickDirection == SweepDirection.Counterclockwise)
-                    stepIncrement = -i;
+			DoubleAnimationUsingKeyFrames rotateAnim = new DoubleAnimationUsingKeyFrames
+			{
+				Duration = TimeSpan.FromMilliseconds(TickCount * 60),
+				RepeatBehavior = RepeatBehavior.Forever
+			};
 
-                PointKeyFrame keyframe = new DiscretePointKeyFrame
-                {
-                    Value = refPoint.Rotate(stepIncrement, center),
-                };
+			var step = 360d / TickCount;
 
-                pointAnim.KeyFrames.Add(keyframe);
-            }
+			for (double i = step; i < 361d; i += step)
+			{
+				var stepIncrement = i;
 
-            return pointAnim;
-        }
+				if (TickDirection == SweepDirection.Counterclockwise)
+					stepIncrement = -i;
 
-        private LoaderTick[] CalculateTicks()
-        {
-            var ticks = new LoaderTick[TickCount];
+				var keyFrame = new DiscreteDoubleKeyFrame
+				{
+					Value = stepIncrement,
+				};
 
-            var angleIncrement = 360d / TickCount;
+				rotateAnim.KeyFrames.Add(keyFrame);
+			}
 
-            var width = RenderSize.Width < RenderSize.Height ? RenderSize.Width : RenderSize.Height;
-            var centerPoint = new Point(RenderSize.Width / 2, RenderSize.Height / 2);
+			rotate.ApplyAnimationClock(RotateTransform.AngleProperty, rotateAnim.CreateClock());
+			return rotate;
+		}
 
-            var innerRadius = (int)(width * 0.175);
-            var outerRadius = (int)(width * 0.3125);
+		private LoaderTick[] CalculateTicks()
+		{
+			var ticks = new LoaderTick[TickCount];
 
-            double angle = 0;
+			var angleIncrement = 360d / TickCount;
 
-            for (int i = 0; i < TickCount; i++)
-            {
-                var angleInRadians = angle.ToRadians();
-                var cos = (float)Math.Cos(angleInRadians);
-                var sin = (float)Math.Sin(angleInRadians);
+			var width = RenderSize.Width < RenderSize.Height ? RenderSize.Width : RenderSize.Height;
+			var centerPoint = new Point(RenderSize.Width / 2, RenderSize.Height / 2);
 
-                var start = new Point(innerRadius * cos, innerRadius * sin);
-                start.Offset(centerPoint.X, centerPoint.Y);
+			var innerRadius = (int)(width * 0.175);
+			var outerRadius = (int)(width * 0.3125);
 
-                var end = new Point(outerRadius * cos, outerRadius * sin);
-                end.Offset(centerPoint.X, centerPoint.Y);
+			double angle = 0;
 
-                ticks[i] = new LoaderTick(start, end, angle);
+			for (int i = 0; i < TickCount; i++)
+			{
+				var angleInRadians = angle.ToRadians();
+				var cos = (float)Math.Cos(angleInRadians);
+				var sin = (float)Math.Sin(angleInRadians);
 
-                angle += angleIncrement;
-            }
+				var start = new Point(innerRadius * cos, innerRadius * sin);
+				start.Offset(centerPoint.X, centerPoint.Y);
 
-            return ticks;
-        }
-    }
+				var end = new Point(outerRadius * cos, outerRadius * sin);
+				end.Offset(centerPoint.X, centerPoint.Y);
+
+				ticks[i] = new LoaderTick(start, end, angle);
+
+				angle += angleIncrement;
+			}
+
+			return ticks;
+		}
+	}
 }

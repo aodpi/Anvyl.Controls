@@ -3,13 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CustomWpfCalendar"
-        xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:ac="https://github.com/aodpi/Anvyl.Controls"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    
+
     <Grid>
-        <ac:Loader HorizontalAlignment="Center" VerticalAlignment="Center" TickEndStyle="Triangle" Foreground="Blue" TickStartStyle="Flat"></ac:Loader>
+        <ac:Loader HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   RenderOptions.BitmapScalingMode="HighQuality"
+                   TickStartStyle="Square"
+                   TickEndStyle="Flat"
+                   TickDirection="Counterclockwise"
+                   Foreground="{x:Static SystemParameters.WindowGlassBrush}">
+        </ac:Loader>
     </Grid>
 </Window>
