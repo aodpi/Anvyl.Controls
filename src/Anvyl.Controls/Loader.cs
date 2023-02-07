@@ -15,7 +15,7 @@ namespace Anvyl.Controls
 		{
 			var ticks = CalculateTicks();
 			var alpha = TickDirection == SweepDirection.Clockwise ? 0.1d : 1d;
-
+			
 			var alphaChange = 1 / (double)TickCount;
 
 			Point center = new Point(RenderSize.Width / 2, RenderSize.Height / 2);
@@ -25,7 +25,7 @@ namespace Anvyl.Controls
 
 			drawingContext.PushTransform(rotate);
 
-			for (int i = 0; i < ticks.Length; i++)
+            for (int i = 0; i < ticks.Length; i++)
 			{
 				var brush = Foreground.Clone();
 
@@ -46,6 +46,8 @@ namespace Anvyl.Controls
 				else
 					alpha -= alphaChange;
 			}
+			
+			drawingContext.Pop();
 		}
 
 		private RotateTransform GetRotateTransform(Point center)

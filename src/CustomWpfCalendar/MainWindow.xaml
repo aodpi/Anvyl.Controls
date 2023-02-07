@@ -4,17 +4,92 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ac="https://github.com/aodpi/Anvyl.Controls"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:media="clr-namespace:System.Windows.Media;assembly=WindowsBase"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
+    <Window.Resources>
+        <ObjectDataProvider x:Key="lineCapEnum" MethodName="GetValues"
+                            ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type Type="{x:Type PenLineCap}"></x:Type>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <ObjectDataProvider x:Key="sweepDirectionSource" MethodName="GetValues"
+                            ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type Type="{x:Type SweepDirection}"></x:Type>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+
     <Grid>
-        <ac:Loader HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   RenderOptions.BitmapScalingMode="HighQuality"
-                   TickStartStyle="Square"
-                   TickEndStyle="Flat"
-                   TickDirection="Counterclockwise"
-                   Foreground="{x:Static SystemParameters.WindowGlassBrush}">
-        </ac:Loader>
+        <TabControl>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Loader"/>
+                </TabItem.Header>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <ac:Loader x:Name="loader"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               TickStartStyle="Square"
+                               TickEndStyle="Flat"
+                               SnapsToDevicePixels="True"
+                               Width="80"
+                               Height="80"
+                               TickWidth="{Binding ElementName=widthSlider, Path=Value}"
+                               TickCount="{Binding ElementName=countSlider, Path=Value}"
+                               TickDirection="Counterclockwise"
+                               Foreground="{x:Static SystemParameters.WindowGlassBrush}">
+                    </ac:Loader>
+
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="25"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Tick Count"></TextBlock>
+                        <Slider Grid.Column="1" x:Name="countSlider" Width="200" HorizontalAlignment="Left" Margin="15,0,0,0" Minimum="1" Maximum="200" Value="12"></Slider>
+
+                        <TextBlock Grid.Row="1" Text="Tick Start Style" VerticalAlignment="Center"></TextBlock>
+                        <ComboBox Grid.Row="1" Grid.Column="1" Width="200" HorizontalAlignment="Left" Margin="15,0,0,0" ItemsSource="{Binding Source={StaticResource lineCapEnum}}"
+                                  SelectedItem="{Binding ElementName=loader,Path=TickStartStyle,Mode=TwoWay}">
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="2" Text="Tick End Style" VerticalAlignment="Center"></TextBlock>
+                        <ComboBox Grid.Row="2" Grid.Column="1" Width="200" HorizontalAlignment="Left" Margin="15,0,0,0" ItemsSource="{Binding Source={StaticResource lineCapEnum}}"
+                                  SelectedItem="{Binding ElementName=loader,Path=TickEndStyle,Mode=TwoWay}">
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="3" Text="Tick Width" VerticalAlignment="Center"/>
+                        <Slider Grid.Row="3" x:Name="widthSlider" Grid.Column="1" Width="200" Margin="15,0,0,0" HorizontalAlignment="Left" Minimum="1" Maximum="10" Value="5"/>
+
+                        <TextBlock Grid.Row="4" Text="TickDirection" VerticalAlignment="Center"/>
+                        <ComboBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding Source={StaticResource sweepDirectionSource}}"
+                                  SelectedItem="{Binding ElementName=loader,Path=TickDirection,Mode=TwoWay}" Width="200" HorizontalAlignment="Left" Margin="15,0,0,0"/>
+                        
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
     </Grid>
 </Window>
